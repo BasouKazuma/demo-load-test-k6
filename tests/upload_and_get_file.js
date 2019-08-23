@@ -14,6 +14,7 @@ export let options = {
 };
 
 export default function() {
+  // Create User
   let email = RandomData.generateEmail();
   let userCreateRes = http.post(
     BASE_URL + "/user/create",
@@ -27,10 +28,11 @@ export default function() {
     }
   );
   check(userCreateRes, {
-    "Status Code": (r) => r.status == 201,
-    "Email": (r) => r.json("email") == email
+    "Status Code is 201": (r) => r.status == 201,
+    "Email Matches": (r) => r.json("email") == email
   });
 
+  // Upload File
   let filename = RandomData.generateFilename();
   let fileCreateRes = http.post(
     BASE_URL + "/user/" + userCreateRes.json("id") + "/file/create",
@@ -44,22 +46,23 @@ export default function() {
     }
   );
   check(fileCreateRes, {
-    "Status Code": (r) => r.status == 201,
-    "User Id": (r) => r.json("user_id") == userCreateRes.json("id"),
-    "File Name": (r) => r.json("name") == filename
+    "Status Code is 201": (r) => r.status == 201,
+    "User Id Matches": (r) => r.json("user_id") == userCreateRes.json("id"),
+    "File Name Matches": (r) => r.json("name") == filename
   });
 
+  // Get Uploaded File
   let fileGetRes = http.get(
     BASE_URL + "/user/" + userCreateRes.json("id") + "/file/" + fileCreateRes.json("hash"),
     JSON.stringify({}),
     { headers: { "Content-Type": "application/json" } }
   );
   check(fileGetRes, {
-    "Status Code": (r) => r.status == 200,
-    "User Id": (r) => r.json("user_id") == userCreateRes.json("id"),
-    "File Name": (r) => r.json("name") == filename,
-    "File Hash": (r) => r.json("hash") == fileCreateRes.json("hash"),
-    "File Bytes": (r) => r.json("bytes") == FILES.default.bytes
+    "Status Code is 200": (r) => r.status == 200,
+    "User Id Matches": (r) => r.json("user_id") == userCreateRes.json("id"),
+    "File Name Matches": (r) => r.json("name") == filename,
+    "File Hash Matches": (r) => r.json("hash") == fileCreateRes.json("hash"),
+    "File Bytes Matches": (r) => r.json("bytes") == FILES.default.bytes
   });
 
   sleep(1);

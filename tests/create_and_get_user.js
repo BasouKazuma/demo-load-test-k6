@@ -13,27 +13,27 @@ export let options = {
 };
 
 export default function() {
+  // Create User
   let email = RandomData.generateEmail();
-
   let userCreateRes = http.post(
     BASE_URL + "/user/create",
     JSON.stringify({ email: email }),
     { headers: { "Content-Type": "application/json" } }
   );
   check(userCreateRes, {
-    "Status Code": (r) => r.status == 201,
-    "Email": (r) => r.json("email") == email
+    "Status Code is 201": (r) => r.status == 201,
+    "Email Matches": (r) => r.json("email") == email
   });
-
+  // Get User
   let userGetRes = http.get(
     BASE_URL + "/user/" + userCreateRes.json("id"),
     JSON.stringify({}),
     { headers: { "Content-Type": "application/json" } }
   );
   check(userGetRes, {
-    "Status Code": (r) => r.status == 200,
-    "User Id": (r) => r.json("id") == userCreateRes.json("id"),
-    "Email": (r) => r.json("email") == userCreateRes.json("email")
+    "Status Code is 200": (r) => r.status == 200,
+    "User Id Matches": (r) => r.json("id") == userCreateRes.json("id"),
+    "Email Matches": (r) => r.json("email") == userCreateRes.json("email")
   });
 
   sleep(1);

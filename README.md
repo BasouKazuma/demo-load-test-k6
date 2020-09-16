@@ -23,6 +23,10 @@ https://documenter.getpostman.com/view/8371151/SVYrseFN?version=latest
 
 `k6 run tests/sample.js`
 
+### Check Single GraphQL Endpoint
+
+`k6 run tests/sample_graphql.js`
+
 ### Create and Get Account
 
 `k6 run tests/create_and_get_user.js`
